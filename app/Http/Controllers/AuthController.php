@@ -10,7 +10,7 @@ class AuthController extends Controller
     public function login()
     {
         if (Auth::check()) {
-            return redirect("/admin/articles");
+            return redirect("/");
         }
         
         return view("login");
@@ -25,7 +25,7 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            return redirect()->intended("/admin/articles");
+            return redirect()->intended("/");
         }
 
         return back()->withErrors([
@@ -46,9 +46,6 @@ class AuthController extends Controller
 
         $request->session()->regenerateToken();
 
-        if(request("public")) {
-            return redirect('/');
-        }
-        return redirect('/login');
+        return redirect('/');
     }
 }

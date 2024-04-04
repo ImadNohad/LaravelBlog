@@ -17,7 +17,7 @@ class AuthorAccess
     
     public function handle(Request $request, Closure $next): Response
     {
-        if (auth()->check() && auth()->user()->type === User::ROLE_AUTHOR) {
+        if (auth()->check() && (auth()->user()->type === User::ROLE_ADMIN || auth()->user()->type === User::ROLE_AUTHOR)) {
             return $next($request);
         }
 

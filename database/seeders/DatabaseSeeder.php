@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+
         User::factory(5)->has(
             Article::factory(5)
                 ->has(Categorie::factory(5))

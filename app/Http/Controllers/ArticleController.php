@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Article;
-use App\Models\Comment;
 use App\Models\Commentaire;
 use App\Models\User;
 use Illuminate\Support\Str;
@@ -13,15 +12,23 @@ class ArticleController extends Controller
 {
     public function index()
     {
-        $isAdmin = auth()->user()->type === User::ROLE_VISITEUR;
-        $view = $isAdmin ? 'articles.index' : 'home';
-        $count = $isAdmin ? 15 : 9;
-        $articles = Article::paginate($count);
-        return to_route($view, ['articles' => $articles]);
+        $articles = Article::paginate(9);
+        return view('index', ['articles' => $articles]);
+    }
+
+    public function indexAdmin()
+    {
+        $articles = Article::paginate(15);
+        if(auth()->user()->type === User::ROLE_AUTHOR){
+            $articles = Article::where('user_id', auth()->user()->id)->paginate(15);
+        }
+        return view('admin.articles.index', ['articles' => $articles]);
     }
 
     public function show(Article $article)
     {
+        $commentaires = $article->commentaires->where('active', 1);
+        $article->commentaires = $commentaires;
         return view("article", ['article' => $article]);
     }
 
@@ -45,7 +52,7 @@ class ArticleController extends Controller
 
         $article->image = $path;
         $article->title = $validated["title"];
-        $article->content = $validated["content"];
+        $article->contenu = $validated["content"];
         $article->user_id = $validated["user"];
         $article->save();
 
@@ -54,7 +61,7 @@ class ArticleController extends Controller
 
     public function edit(Article $article)
     {
-        return view("admin.edit", ['article' => $article]);
+        return view("admin.articles.edit", ['article' => $article]);
     }
 
     public function update(Request $request, Article $article)
@@ -91,19 +98,17 @@ class ArticleController extends Controller
     public function storeComment(Request $request, Article $article)
     {
         $validated = $request->validate([
-            'name' => 'required',
-            'email' => 'required|email',
             'comment' => 'required',
         ]);
 
         $newComment = new Commentaire();
-        $newComment->name = $validated["name"];
-        $newComment->email = $validated["email"];
-        $newComment->comment = $validated["comment"];
+        $newComment->contenu = $validated["comment"];
+        $newComment->user()->associate(auth()->user());
+        $newComment->active = false;
 
-        $article->comments()->save($newComment);
+        $article->commentaires()->save($newComment);
 
-        return view("post", ['article' => $article]);
+        return view("article", ['article' => $article]);
     }
 
     public function searchArticles()

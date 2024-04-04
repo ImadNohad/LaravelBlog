@@ -3,58 +3,37 @@
     <div class="container">
         <div class="row py-5">
             <div class="col-12">
-                <h1>Articles List</h1>
+                <h1>Categories List</h1>
                 <div class="mt-5">
-                    <a class="btn btn-primary" href="{{ route('articles.create') }}">Add article</a>
+                    <a class="btn btn-primary" href="{{ route('categories.create') }}">Add categorie</a>
                 </div>
                 <table id="example" class="table table-hover responsive nowrap text-center" style="width:100%">
                     <thead>
                         <tr>
                             <td colspan="5" class="p-0">
-                                {{ $articles->links('vendor.pagination.custom') }}
+                                {{ $categories->links('vendor.pagination.custom') }}
                             </td>
                         </tr>
                         <tr>
-                            <th>Article Title</th>
-                            <th>Categories</th>
-                            <th>Content</th>
-                            <th>Date of Publication</th>
-                            <th>Author</th>
-                            <th>Comments</th>
+                            <th>Categorie</th>
+                            <th>Creation Date</th>
+                            <th>Update Date</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($articles as $item)
+                        @foreach ($categories as $item)
                             <tr>
-                                <td>
-                                    <a href="{{ route('article.show', $item->id) }}" target="_blank">
-                                        <div class="d-flex align-items-center">
-                                            <div class="avatar avatar-blue mr-3">
-                                                <img src="{{ $item->imageURL }}" alt="" width="40">
-                                            </div>
-
-                                            <div class="">
-                                                <p class="font-weight-bold mb-0">{{ $item->title }}</p>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </td>
-                                <td>{{ $item->categories()->implode('nom', ', ') }}</td>
-                                <td>{!! Str::substr($item->contenu, 0, 40) !!}...</td>
+                                <td>{{ $item->nom }}</td>
                                 <td>{{ $item->created_at->format('d/m/Y') }}</td>
-                                <td>{{ $item->user->name }}</td>
+                                <td>{{ $item->updated_at->format('d/m/Y') }}</td>
                                 <td>
-                                    <a class="" href="{{ route('articleComments', $item) }}"><i
-                                            class="bx bx-message-rounded mr-2"></i>{{ $item->commentaires->count() }}</a>
-                                </td>
-                                <td>
-                                    <div class="d-flex">
-                                        <a href="/admin/articles/{{ $item->id }}/edit"><i
+                                    <div class="d-flex justify-content-center">
+                                        <a href="/admin/categories/{{ $item->id }}/edit"><i
                                                 class="bx bxs-pencil mr-2"></i></a>
 
                                         <form id="delete{{ $item->id }}"
-                                            action="{{ route('articles.destroy', $item) }}" method="POST">
+                                            action="{{ route('categories.destroy', $item) }}" method="POST">
                                             @csrf
                                             @method('DELETE')
 
@@ -72,7 +51,7 @@
                     <tfoot>
                         <tr>
                             <td colspan="5" class="p-0">
-                                {{ $articles->links('vendor.pagination.custom') }}
+                                {{ $categories->links('vendor.pagination.custom') }}
                             </td>
                         </tr>
                     </tfoot>
@@ -92,7 +71,7 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        Do you really want to delete this article ?
+                        Do you really want to delete this categorie ?
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

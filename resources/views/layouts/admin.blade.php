@@ -48,7 +48,7 @@
                                     <a class="nav-link" href="/admin/articles">Articles</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="/admin/articles/comments">Comments</a>
+                                    <a class="nav-link" href="/admin/comments">Comments</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" href="/admin/articles/tags">Tags</a>

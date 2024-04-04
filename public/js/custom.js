@@ -135,13 +135,18 @@
     });
 
     var Id = 0;
+    var action = "";
     $("#exampleModalCenter").on("show.bs.modal", function (event) {
         var button = event.relatedTarget;
         Id = button.getAttribute("data-bs-id");
-        console.log(Id);
+        action = button.getAttribute("data-bs-action");
     });
 
     $("#show-confirm").on("click", function (event) {
-        $(`#delete${Id}`).submit();
+        if (action === "delete") {
+            $(`#delete${Id}`).submit();
+            return;
+        }
+        $(`#accept${Id}`).submit();
     });
 })(jQuery);

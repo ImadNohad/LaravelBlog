@@ -14,7 +14,7 @@ class Article extends Model
     }
 
     public function commentaires(){
-        return $this->hasMany(Commentaire::class);
+        return $this->hasMany(Commentaire::class)->where('comment_parent', null);;
     }
 
     public function likes(){

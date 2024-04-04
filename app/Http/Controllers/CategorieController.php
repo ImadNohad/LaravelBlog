@@ -12,7 +12,8 @@ class CategorieController extends Controller
      */
     public function index()
     {
-        //
+        $categories = Categorie::paginate(15);
+        return view('admin.categories.index', ['categories' => $categories]);
     }
 
     /**

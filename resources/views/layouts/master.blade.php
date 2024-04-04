@@ -42,11 +42,16 @@
                 <div class="collapse navbar-collapse" id="navbar-collapse">
                     <ul class="menu navbar-nav ml-auto">
                         <li class="nav-item"><a href="/" class="nav-link">Home</a></li>
-                        @if (!auth()->user())
+                        @auth
+                            @if (auth()->user()->type !== 'visiteur')
+                                <li class="nav-item"><a href="/admin/articles" class="nav-link">Admin Area</a></li>
+                            @endif
+                            <li class="nav-item"><a href="/logout" class="nav-link">Logout</a></li>
+                        @endauth
+
+                        @guest
                             <li class="nav-item"><a href="/login" class="nav-link">Login</a></li>
-                        @else
-                            <li class="nav-item"><a href="/logout?public=1" class="nav-link">Logout</a></li>
-                        @endif
+                        @endguest
                     </ul>
                     <div class="text-lg-right search ml-4">
                         <div class="search_toggle"><i class="ti-search text-white"></i></div>

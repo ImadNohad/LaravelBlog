@@ -3,7 +3,9 @@
     <div class="container">
         <div class="row py-5">
             <div class="col-12">
-                <h1>{{ $article->title }}'s Comments</h1>
+                @isset($article)
+                    <h1>{{ $article->title }}'s Comments</h1>
+                @endisset
                 <div class="mt-5">
                     <a class="btn btn-primary" href="{{ route('articles.index') }}">
                         < Back to articles</a>
@@ -17,9 +19,13 @@
                         </tr>
                         <tr>
                             <th>Name</th>
+                            @empty($article)
+                                <th>Article</th>
+                            @endempty
                             <th>Email</th>
                             <th>Comment</th>
                             <th>Date of Publication</th>
+                            <th>Status</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -29,25 +35,62 @@
                                 <td>
                                     <div class="d-flex align-items-center">
                                         <div class="">
-                                            <p class="font-weight-bold mb-0">{{ $comment->name }}</p>
+                                            <p class="font-weight-bold mb-0">{{ $comment->user->name }}</p>
                                         </div>
                                     </div>
                                 </td>
-                                <td>{{ $comment->email }}</td>
-                                <td>{{ $comment->comment }}</td>
+                                @empty($article)
+                                    <td><a target="_blank"
+                                            href="{{ route('article.show', $comment->article->id) }}">{{ $comment->article->title }}</a>
+                                    </td>
+                                @endempty
+                                <td>{{ $comment->user->email }}</td>
+                                <td>{{ $comment->contenu }}</td>
                                 <td>{{ $comment->created_at->format('d/m/Y') }}</td>
                                 <td>
-                                    <div>
-                                        <form id="delete{{ $comment->id }}" action="{{ route('deleteComment', $comment) }}"
-                                            method="POST">
-                                            @csrf
-                                            @method('DELETE')
+                                    <span
+                                        @class([
+                                            'badge',
+                                            'bg-success' => $comment->active,
+                                            'bg-warning' => !$comment->active,
+                                        ])>{{ $comment->active ? 'Approved' : 'Pending' }}</span>
+                                </td>
+                                <td>
+                                    <div class="d-flex">
+                                        <div>
+                                            <form id="accept{{ $comment->id }}"
+                                                action="{{ route('acceptComment', $comment) }}" method="POST">
+                                                @csrf
+                                                @method('PUT')
 
-                                            <button class="text-danger border-0 bg-transparent" type="button"
-                                                data-toggle="modal" data-target="#exampleModalCenter" data-bs-id="{{ $comment->id }}">
-                                                <i class="bx bxs-trash mr-2"></i>
-                                            </button>
-                                        </form>
+                                                <button @class([
+                                                    'border-0 bg-transparent',
+                                                    'text-success' => !$comment->active,
+                                                    'text-warning' => $comment->active,
+                                                ]) type="button" data-toggle="modal"
+                                                    data-target="#exampleModalCenter" data-bs-id="{{ $comment->id }}"
+                                                    data-bs-action="accept">
+                                                    <i @class([
+                                                        'bx mr-2',
+                                                        'bxs-check-circle' => !$comment->active,
+                                                        'bxs-x-circle' => $comment->active,
+                                                    ])></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                        <div>
+                                            <form id="delete{{ $comment->id }}"
+                                                action="{{ route('deleteComment', $comment) }}" method="POST">
+                                                @csrf
+                                                @method('DELETE')
+
+                                                <button class="text-danger border-0 bg-transparent" type="button"
+                                                    data-toggle="modal" data-target="#exampleModalCenter"
+                                                    data-bs-id="{{ $comment->id }}" data-bs-action="delete">
+                                                    <i class="bx bxs-trash mr-2"></i>
+                                                </button>
+                                            </form>
+                                        </div>
                                     </div>
                                 </td>
                             </tr>
@@ -77,7 +120,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    Do you really want to delete this comment ?
+                    Do you really want to perform this action ?
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

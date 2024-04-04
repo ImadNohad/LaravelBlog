@@ -12,7 +12,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::paginate(15);
+        $users = User::where('id', '<>', auth()->user()->id)->paginate(15);
         $user_count = User::all()->count();
         return view("admin.users.index", ['users' => $users, 'user_count' => $user_count]);
     }

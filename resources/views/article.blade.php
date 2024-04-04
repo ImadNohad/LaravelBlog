@@ -84,6 +84,7 @@
                     </div>
 
                     @if (Auth::check())
+                        <p><b>Commenting as : </b>{{ auth()->user()->name }}</p>
                         <form action="{{ route('addComment', $article) }}" method="POST"
                             class="comment-form mb-5 gray-bg p-5" id="comment-form">
                             @csrf
@@ -96,7 +97,7 @@
 
                                     <textarea class="form-control mb-3" name="comment" id="comment" cols="30" rows="5" placeholder="Comment">{{ old('comment') }}</textarea>
                                 </div>
-                                <div class="col-md-6">
+                                {{-- <div class="col-md-6">
                                     <div class="form-group">
                                         @error('name')
                                             {{ $message }}
@@ -113,7 +114,7 @@
                                         <input class="form-control" type="text" name="email" id="mail"
                                             value="{{ old('email') }}" placeholder="Email:">
                                     </div>
-                                </div>
+                                </div> --}}
                             </div>
 
                             <input class="btn btn-primary" type="submit" name="submit-contact" id="submit_contact"

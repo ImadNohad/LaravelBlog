@@ -26,29 +26,27 @@
                                 <td>
                                     <div class="d-flex align-items-center">
                                         <div class="">
-                                            <p class="font-weight-bold mb-0">{{ $user->firstname }} {{ $user->lastname }}</p>
+                                            <p class="font-weight-bold mb-0">{{ $user->name }}</p>
                                         </div>
                                     </div>
                                 </td>
                                 <td>{{ $user->email }}</td>
                                 <td>{{ $user->created_at->format('d/m/Y') }}</td>
-                                @if ($user_count > 1 && auth()->user()->id != $user->id)
-                                    <td>
-                                        <div>
-                                            <form id="delete{{ $user->id }}"
-                                                action="{{ route('users.destroy', $user->id) }}" method="POST">
-                                                @csrf
-                                                @method('DELETE')
+                                <td>
+                                    <div>
+                                        <form id="delete{{ $user->id }}"
+                                            action="{{ route('users.destroy', $user->id) }}" method="POST">
+                                            @csrf
+                                            @method('DELETE')
 
-                                                <button class="text-danger border-0 bg-transparent" type="button"
-                                                    data-toggle="modal" data-target="#exampleModalCenter"
-                                                    data-bs-id="{{ $user->id }}">
-                                                    <i class="bx bxs-trash mr-2"></i>
-                                                </button>
-                                            </form>
-                                        </div>
-                                    </td>
-                                @endif
+                                            <button class="text-danger border-0 bg-transparent" type="button"
+                                                data-toggle="modal" data-target="#exampleModalCenter"
+                                                data-bs-id="{{ $user->id }}">
+                                                <i class="bx bxs-trash mr-2"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
 
                             </tr>
                         @endforeach
