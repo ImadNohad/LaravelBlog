@@ -21,7 +21,7 @@ class CategorieController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.categories.create');
     }
 
     /**
@@ -29,38 +29,57 @@ class CategorieController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'nom' => 'required'
+        ]);
+
+        $categorie = new Categorie();
+        $categorie->nom = $validated['nom'];
+        $categorie->active = $request->boolean('active');
+        $categorie->save();
+
+        return redirect()->route("categories.index");
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Categorie $categorie)
+    public function show(Categorie $category)
     {
-        //
+        return view('categorie', ['category' => $category]);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Categorie $categorie)
+    public function edit(Categorie $category)
     {
-        //
+        return view('admin.categories.edit', ['category' => $category]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Categorie $categorie)
+    public function update(Request $request, Categorie $category)
     {
-        //
+        $validated = $request->validate([
+            'nom' => 'required'
+        ]);
+
+        $category->nom = $validated['nom'];
+        $category->active = $request->boolean('active');
+        $category->update();
+
+        return redirect()->route("categories.index");
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Categorie $categorie)
+    public function destroy(Categorie $category)
     {
-        //
+        $category->delete();
+
+        return redirect()->back();
     }
 }

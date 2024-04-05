@@ -57,40 +57,36 @@
                                 </td>
                                 <td>
                                     <div class="d-flex">
-                                        <div>
-                                            <form id="accept{{ $comment->id }}"
-                                                action="{{ route('acceptComment', $comment) }}" method="POST">
-                                                @csrf
-                                                @method('PUT')
+                                        <form id="accept{{ $comment->id }}"
+                                            action="{{ route('acceptComment', $comment) }}" method="POST">
+                                            @csrf
+                                            @method('PUT')
 
-                                                <button @class([
-                                                    'border-0 bg-transparent',
-                                                    'text-success' => !$comment->active,
-                                                    'text-warning' => $comment->active,
-                                                ]) type="button" data-toggle="modal"
-                                                    data-target="#exampleModalCenter" data-bs-id="{{ $comment->id }}"
-                                                    data-bs-action="accept">
-                                                    <i @class([
-                                                        'bx mr-2',
-                                                        'bxs-check-circle' => !$comment->active,
-                                                        'bxs-x-circle' => $comment->active,
-                                                    ])></i>
-                                                </button>
-                                            </form>
-                                        </div>
-                                        <div>
-                                            <form id="delete{{ $comment->id }}"
-                                                action="{{ route('deleteComment', $comment) }}" method="POST">
-                                                @csrf
-                                                @method('DELETE')
+                                            <button @class([
+                                                'border-0 bg-transparent',
+                                                'text-success' => !$comment->active,
+                                                'text-warning' => $comment->active,
+                                            ]) type="button" data-toggle="modal"
+                                                data-target="#exampleModalCenter" data-bs-id="{{ $comment->id }}"
+                                                data-bs-action="accept">
+                                                <i @class([
+                                                    'bx mr-2',
+                                                    'bxs-check-circle' => !$comment->active,
+                                                    'bxs-x-circle' => $comment->active,
+                                                ])></i>
+                                            </button>
+                                        </form>
+                                        <form id="delete{{ $comment->id }}"
+                                            action="{{ route('deleteComment', $comment) }}" method="POST">
+                                            @csrf
+                                            @method('DELETE')
 
-                                                <button class="text-danger border-0 bg-transparent" type="button"
-                                                    data-toggle="modal" data-target="#exampleModalCenter"
-                                                    data-bs-id="{{ $comment->id }}" data-bs-action="delete">
-                                                    <i class="bx bxs-trash mr-2"></i>
-                                                </button>
-                                            </form>
-                                        </div>
+                                            <button class="text-danger border-0 bg-transparent" type="button"
+                                                data-toggle="modal" data-target="#exampleModalCenter"
+                                                data-bs-id="{{ $comment->id }}" data-bs-action="delete">
+                                                <i class="bx bxs-trash mr-2"></i>
+                                            </button>
+                                        </form>
                                     </div>
                                 </td>
                             </tr>

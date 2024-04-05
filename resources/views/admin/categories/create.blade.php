@@ -3,11 +3,11 @@
     <div class="container">
         <div class="row py-5">
             <div class="col-12">
-                <h1>Add Article</h1>
+                <h1>Add Categorie</h1>
 
                 @if ($errors->any())
                     <div class="alert alert-danger">
-                        <ul>
+                        <ul class="m-0">
                             @foreach ($errors->all() as $error)
                                 <li>{{ $error }}</li>
                             @endforeach
@@ -15,28 +15,20 @@
                     </div>
                 @endif
 
-                <form action="/admin/articles" method="POST" enctype="multipart/form-data">
+                <form action="/admin/categories" method="POST">
                     @csrf
-                    
                     <div class="form-outline mb-4">
-                        <label class="form-label" for="txtTitle">Title</label>
-                        <input type="text" name="title" id="txtTitle" class="form-control"
-                            value="{{ old("title") }}" />
+                        <label class="form-label" for="txtNom">Nom</label>
+                        <input type="text" name="nom" id="txtNom" class="form-control"
+                            value="{{ old('nom') }}" />
                     </div>
 
-                    <div class="form-outline mb-4">
-                        <label class="form-label" for="txtContent">Article Body</label>
-                        <textarea class="form-control" name="content" id="txtcontent" rows="20">{{ old("title") }}</textarea>
+                    <div class="form-check d-flex">
+                        <label class="form-label" for="cbActive">Active</label>
+                        <input class="form-check-input" name="active" type="checkbox" id="cbActive" />
                     </div>
 
-                    <div class="form-outline mb-4">
-                        <label class="form-label" for="fImage">Article Image</label><br>
-                        <input type="file" name="image" id="fImage" class="form-control" />
-                    </div>
-
-                    <input type="hidden" name="user" value="{{ auth()->user()->id }}">
-
-                    <button type="submit" class="btn btn-primary btn-block mb-4">Save changes</button>
+                    <button type="submit" class="btn btn-primary btn-inline mb-4">Save changes</button>
                 </form>
             </div>
         </div>

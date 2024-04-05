@@ -3,10 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\Article;
+use App\Models\Categorie;
 use App\Models\Commentaire;
+use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
+
+use function PHPUnit\Framework\isNull;
 
 class ArticleController extends Controller
 {
@@ -41,7 +46,8 @@ class ArticleController extends Controller
     {
         $validated = $request->validate([
             'title' => 'required',
-            'content' => 'required',
+            'contenu' => 'required',
+            'category' => 'required',
             // 'image' => 'required|mimes:jpeg,jpg,png,gif',
             'user' => 'required'
         ]);
@@ -52,8 +58,10 @@ class ArticleController extends Controller
 
         $article->image = $path;
         $article->title = $validated["title"];
-        $article->contenu = $validated["content"];
+        $article->contenu = $validated["contenu"];
         $article->user_id = $validated["user"];
+        $article->categories()->sync($validated["category"]);
+        $article->tags()->sync($validated["tags"]->explode(','));
         $article->save();
 
         return redirect()->route("articles.index");
@@ -61,14 +69,16 @@ class ArticleController extends Controller
 
     public function edit(Article $article)
     {
-        return view("admin.articles.edit", ['article' => $article]);
+        $categories = Categorie::where('active', true)->get();
+        return view("admin.articles.edit", ['article' => $article, 'categories' => $categories]);
     }
 
     public function update(Request $request, Article $article)
     {
         $validated = $request->validate([
             'title' => 'required',
-            'content' => 'required',
+            'contenu' => 'required',
+            'category' => 'required',
             // 'image' => 'required|mimes:jpeg,jpg,png,gif',
             'user' => 'required'
         ]);
@@ -79,19 +89,31 @@ class ArticleController extends Controller
         }
 
         $article->title = $validated["title"];
-        $article->content = $validated["content"];
+        $article->contenu = $validated["contenu"];
         $article->user_id = $validated["user"];
+        $article->categories()->sync($validated["category"]);
+        $tagIds = [];
+        $tags = Str::of($request["tags"])->explode(',');
+        foreach ($tags as $t) {
+            $tag = Tag::where('nom', $t)->first();
+            if(isNull($tag)){
+                $tag = new Tag();
+                $tag->nom = $t;
+                $tag->save();
+            }
+            array_push($tagIds, $tag->id);
+        }
+
+        $article->tags()->sync($tagIds);
 
         $article->update();
 
         return redirect()->route("articles.index");
     }
 
-    public function destroy($id)
+    public function destroy(Article $article)
     {
-        $article = Article::find($id);
         $article->delete();
-
         return redirect()->route("articles.index");
     }
 

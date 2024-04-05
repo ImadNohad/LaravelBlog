@@ -50,6 +50,6 @@ class CommentaireController extends Controller
     {
         $comment->delete();
 
-        return redirect()->route("comments", $comment->article);
+        return redirect()->back();
     }
 }

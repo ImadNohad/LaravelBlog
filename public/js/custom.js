@@ -143,7 +143,7 @@
     });
 
     $("#show-confirm").on("click", function (event) {
-        if (action === "delete") {
+        if (!action || action === "delete") {
             $(`#delete${Id}`).submit();
             return;
         }

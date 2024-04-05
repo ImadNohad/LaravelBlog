@@ -20,20 +20,44 @@
                     @method('PUT')
 
                     <div class="form-outline mb-4">
-                        <label class="form-label" for="txtTitle">Title</label>
-                        <input type="text" name="title" id="txtTitle" class="form-control"
-                            value="{{ $article->title }}" />
+                        <h3 class="form-label">Categories</h3>
+                        <div class="container">
+                            @foreach ($categories as $cat)
+                                @if ($loop->iteration % 6 === 0)
+                                    </div>
+                                @endif
+                                @if ($loop->iteration % 6 === 0 || $loop->first)
+                                    <div class="row justify-content-between">
+                                @endif
+                                <div class="col-s">
+                                    <input name="category[]" type="checkbox" value={{ $cat->id }}
+                                        {{ $article->categories->contains($cat->id) ? 'checked' : '' }} />
+                                    <label class="form-label">{{ $cat->nom }}</label>
+                                </div>
+                            @endforeach
+                        </div>
                     </div>
 
                     <div class="form-outline mb-4">
-                        <label class="form-label" for="txtContent">Article Body</label>
-                        <textarea class="form-control" name="content" id="txtcontent" rows="20">{{ $article->content }}</textarea>
+                        <h3 class="form-label" for="txtTitle">Title</h3>
+                        <input type="text" name="title" id="txtTitle" class="form-control" value="{{ $article->title }}" />
                     </div>
 
                     <div class="form-outline mb-4">
-                        <label class="form-label" for="fImage">Article Image</label><br>
+                        <h3 class="form-label" for="txtContent">Article Body</h3>
+                        <textarea class="form-control" name="contenu" id="txtcontent" rows="20">{{ $article->contenu }}</textarea>
+                    </div>
+
+                    <div class="form-outline mb-4">
+                        <h3 class="form-label" for="fImage">Article Image</h3><br>
                         <img width="300" src="{{ $article->image }}" alt="">
                         <input type="file" name="image" id="fImage" class="form-control" />
+                    </div>
+
+                    <div class="form-outline mb-4">
+                        <h3 class="form-label" for="txtTags">Tags</h3>
+                        <input type="text" name="tags" id="txtTags" class="form-control"
+                            value="{{ $article->tags()->implode('nom', ',') }}" />
                     </div>
 
                     <input type="hidden" name="user" value="{{ $article->user->id }}">

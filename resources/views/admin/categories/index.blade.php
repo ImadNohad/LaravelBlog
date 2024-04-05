@@ -16,6 +16,7 @@
                         </tr>
                         <tr>
                             <th>Categorie</th>
+                            <th>Active</th>
                             <th>Creation Date</th>
                             <th>Update Date</th>
                             <th>Actions</th>
@@ -25,6 +26,9 @@
                         @foreach ($categories as $item)
                             <tr>
                                 <td>{{ $item->nom }}</td>
+                                <td><i @class([
+                                    'bx bxs-check-circle text-success' => $item->active,
+                                ])></i></td>
                                 <td>{{ $item->created_at->format('d/m/Y') }}</td>
                                 <td>{{ $item->updated_at->format('d/m/Y') }}</td>
                                 <td>
@@ -71,7 +75,7 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        Do you really want to delete this categorie ?
+                        Do you really want to delete this category ?
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
