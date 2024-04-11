@@ -10,7 +10,7 @@
                             <div class="col-lg-4 col-md-6 col-sm-6">
                                 <article class="post-grid mb-5 ">
                                     <a class="post-thumb mb-4 d-block" href="{{ route('article.show', $item->id) }}">
-                                        <img src="{{ $item->imageURL }}" alt="" class="img-fluid w-100">
+                                        <img src="{{ asset('storage/images/' . $item->imageURL) }}" alt="" class="img-fluid w-100">
                                     </a>
 
                                     <div class="post-content-grid">

@@ -23,7 +23,7 @@
                             value="{{ old('nom') }}" />
                     </div>
 
-                    <div class="form-check d-flex">
+                    <div class="form-check">
                         <label class="form-label" for="cbActive">Active</label>
                         <input class="form-check-input" name="active" type="checkbox" id="cbActive" />
                     </div>

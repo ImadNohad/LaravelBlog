@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 
 <html lang="en">
-
 <head>
     <meta charset="utf-8">
     <title>Revolve - Personal Magazine blog Template</title>
@@ -13,7 +12,7 @@
 
     <!-- THEME CSS ================================================== -->
     <!-- Bootstrap -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ asset('plugins/bootstrap/css/bootstrap.min.css') }}">
     <!-- Themify -->
     <link rel="stylesheet" href="{{ asset('plugins/themify/css/themify-icons.css') }}">
     <link rel="stylesheet" href="{{ asset('plugins/slick-carousel/slick-theme.css') }}">
@@ -22,7 +21,7 @@
     <link rel="stylesheet" href="{{ asset('plugins/owl-carousel/owl.carousel.min.css') }}">
     <link rel="stylesheet" href="{{ asset('plugins/owl-carousel/owl.theme.default.min.css') }}">
     <link rel="stylesheet" href="{{ asset('plugins/magnific-popup/magnific-popup.css') }}">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@2.0.0/css/boxicons.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css">
     <!-- main stylesheet -->
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 </head>
@@ -38,27 +37,33 @@
                 </div>
 
                 <div class="main-menu">
-                    <nav class="navbar navbar-expand-lg p-0">
-                        <div class="navbar-collapse collapse" id="navbarsExample09" style="">
+                    <nav class="nav navbar-expand-lg p-0">
+                        <div class="navbar-collapse collapse">
                             <ul class="list-unstyled ">
                                 <li class="nav-item">
+                                    <i class='bx bxs-category-alt mr-2'></i>
                                     <a class="nav-link" href="/admin/categories">Categories</a>
                                 </li>
                                 <li class="nav-item">
+                                    <i class='bx bxs-detail mr-2'></i>
                                     <a class="nav-link" href="/admin/articles">Articles</a>
                                 </li>
                                 <li class="nav-item">
+                                    <i class='bx bxs-comment mr-2'></i>
                                     <a class="nav-link" href="/admin/comments">Comments</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="/admin/articles/tags">Tags</a>
+                                    <i class='bx bxs-tag mr-2'></i>
+                                    <a class="nav-link" href="/admin/tags">Tags</a>
                                 </li>
-                                @if (auth()->user()->type === "admin")
+                                @if (auth()->user()->type === 'admin')
                                     <li class="nav-item">
+                                        <i class='bx bxs-user mr-2'></i>
                                         <a class="nav-link" href="/admin/users">Users</a>
                                     </li>
                                 @endif
                                 <li class="nav-item">
+                                    <i class='bx bxs-log-out-circle mr-2'></i>
                                     <a class="nav-link" href="/logout">Logout</a>
                                 </li>
                             </ul>

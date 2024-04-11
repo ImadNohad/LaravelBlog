@@ -22,8 +22,11 @@
     <link rel="stylesheet" href="{{ asset('plugins/owl-carousel/owl.carousel.min.css') }}">
     <link rel="stylesheet" href="{{ asset('plugins/owl-carousel/owl.theme.default.min.css') }}">
     <link rel="stylesheet" href="{{ asset('plugins/magnific-popup/magnific-popup.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css">
     <!-- main stylesheet -->
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    <!-- initialize jQuery Library -->
+    <script src="{{ asset('plugins/jquery/jquery.js') }}"></script>
 </head>
 
 <body>
@@ -40,7 +43,7 @@
                 </button>
 
                 <div class="collapse navbar-collapse" id="navbar-collapse">
-                    <ul class="menu navbar-nav ml-auto">
+                    <ul class="menu navbar-nav ms-auto">
                         <li class="nav-item"><a href="/" class="nav-link">Home</a></li>
                         @auth
                             @if (auth()->user()->type !== 'visiteur')
@@ -53,7 +56,7 @@
                             <li class="nav-item"><a href="/login" class="nav-link">Login</a></li>
                         @endguest
                     </ul>
-                    <div class="text-lg-right search ml-4">
+                    <div class="text-lg-right search ms-4">
                         <div class="search_toggle"><i class="ti-search text-white"></i></div>
                     </div>
                 </div>
@@ -105,8 +108,6 @@
 
     <!-- THEME JAVASCRIPT FILES
     ================================================== -->
-    <!-- initialize jQuery Library -->
-    <script src="{{ asset('plugins/jquery/jquery.js') }}"></script>
     <!-- Bootstrap jQuery -->
     <script src="{{ asset('plugins/bootstrap/js/bootstrap.min.js') }}"></script>
     <script src="{{ asset('plugins/bootstrap/js/popper.min.js') }}"></script>

@@ -3,12 +3,12 @@
     <div class="container">
         <div class="row py-5">
             <div class="col-12">
-                <h1>Categories List</h1>
+                <h1>Tags List</h1>
                 <div class="mt-4">
-                    <a class="btn btn-primary" href="{{ route('categories.create') }}">Add categorie</a>
+                    <a class="btn btn-primary" href="{{ route('tags.create') }}">Add tag</a>
                 </div>
 
-                <form id="form" action="{{ route('categories.index') }}" class="mt-4">
+                <form id="form" action="{{ route('tags.index') }}" class="mt-4">
                     <div class="row">
                         <div class="col-6">
                             <div class="form-outline mb-4">
@@ -39,7 +39,7 @@
                             <div class="form-outline mb-4">
                                 <h3 class="form-label" for="drpAuthor">Active</h3>
                                 <input type="checkbox" name="active" id="cbActive"
-                                    {{ request()->query('active') == "on" ? 'checked' : '' }} />
+                                    {{ request()->query('active') == 'on' ? 'checked' : '' }} />
                             </div>
                         </div>
                     </div>
@@ -50,16 +50,16 @@
                     </div>
                 </form>
 
-                @if ($categories->count() > 0)
+                @if ($tags->count() > 0)
                     <table class="table table-striped responsive nowrap text-center" style="width:100%">
                         <thead>
                             <tr>
                                 <td colspan="5" class="p-0">
-                                    {{ $categories->links('vendor.pagination.custom') }}
+                                    {{ $tags->links('vendor.pagination.custom') }}
                                 </td>
                             </tr>
                             <tr>
-                                <th>Categorie</th>
+                                <th>Tag</th>
                                 <th>Active</th>
                                 <th>Creation Date</th>
                                 <th>Update Date</th>
@@ -67,7 +67,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($categories as $item)
+                            @foreach ($tags as $item)
                                 <tr>
                                     <td>{{ $item->nom }}</td>
                                     <td><i @class([
@@ -77,11 +77,11 @@
                                     <td>{{ $item->updated_at->format('d/m/Y') }}</td>
                                     <td>
                                         <div class="d-flex justify-content-center">
-                                            <a href="/admin/categories/{{ $item->id }}/edit"><i
+                                            <a href="/admin/tags/{{ $item->id }}/edit"><i
                                                     class="bx bxs-pencil mr-2"></i></a>
 
                                             <form id="delete{{ $item->id }}"
-                                                action="{{ route('categories.destroy', $item) }}" method="POST">
+                                                action="{{ route('tags.destroy', $item) }}" method="POST">
                                                 @csrf
                                                 @method('DELETE')
 
@@ -99,13 +99,13 @@
                         <tfoot>
                             <tr>
                                 <td colspan="5" class="p-0">
-                                    {{ $categories->links('vendor.pagination.custom') }}
+                                    {{ $tags->links('vendor.pagination.custom') }}
                                 </td>
                             </tr>
                         </tfoot>
                     </table>
                 @else
-                    <p class="mt-4">No categories to show.</p>
+                    <p class="mt-4">No tags to show.</p>
                 @endif
             </div>
         </div>
@@ -122,7 +122,7 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        Do you really want to delete this category ?
+                        Do you really want to delete this tag ?
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

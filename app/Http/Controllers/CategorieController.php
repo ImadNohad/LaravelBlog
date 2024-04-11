@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Categorie;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 
 class CategorieController extends Controller
@@ -10,10 +11,43 @@ class CategorieController extends Controller
         /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $categories = Categorie::paginate(15);
+        $categories = $this->search($request)->get()->paginate(15)->withQueryString();
         return view('admin.categories.index', ['categories' => $categories]);
+    }
+
+    public function categoryArticles(Categorie $category) {
+        $articles = $category->articles->paginate(6);
+        return view('category', ['category' => $category, 'articles' => $articles]);
+    }
+
+    public function search($request)
+    {
+        $keyword = Str::lower($request->keyword);
+        $active = $request->has('active');
+        $dateFrom = Str::lower($request->dateFrom);
+        $dateTo = Str::lower($request->dateTo);
+
+        $categories = Categorie::query();
+
+        if (!empty($keyword)) {
+            $categories = $categories->where('nom', "like", "%" . $keyword . "%");
+        }
+
+        if (!empty($dateFrom)) {
+            $categories = $categories->whereDate('created_at', '>=', $dateFrom);
+        }
+
+        if (!empty($dateTo)) {
+            $categories = $categories->whereDate('created_at', '<=', $dateTo);
+        }
+
+        if (!empty($active)) {
+            $categories = $categories->where('active', $active);
+        }
+
+        return $categories;
     }
 
     /**

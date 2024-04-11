@@ -14,7 +14,7 @@ class Article extends Model
     }
 
     public function commentaires(){
-        return $this->hasMany(Commentaire::class)->where('comment_parent', null);;
+        return $this->hasMany(Commentaire::class)->where('comment_parent', null);
     }
 
     public function likes(){
@@ -22,7 +22,7 @@ class Article extends Model
     }
 
     public function tags(){
-        return $this->belongsToMany(Tag::class)->withTimestamps();;
+        return $this->belongsToMany(Tag::class)->withTimestamps();
     }
 
     public function user(){

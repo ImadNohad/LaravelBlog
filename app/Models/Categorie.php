@@ -9,7 +9,8 @@ class Categorie extends Model
 {
     use HasFactory;
 
-    public function articles(){
-        return $this->belongsToMany(Article::class)->withTimestamps();;
+    public function articles()
+    {
+        return $this->belongsToMany(Article::class)->withTimestamps();
     }
 }

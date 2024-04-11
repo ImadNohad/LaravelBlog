@@ -3,8 +3,12 @@
     <div class="container">
         <div class="row py-5">
             <div class="col-12">
-                <h1>Users</h1>
-                <table id="example" class="table table-hover responsive nowrap text-center" style="width:100%">
+                <h1>Users List</h1>
+                <div class="mt-4">
+                    <a class="btn btn-primary" href="{{ route('users.create') }}">Add User</a>
+                </div>
+
+                <table class="table table-striped responsive nowrap text-center" style="width:100%">
                     <thead>
                         <tr>
                             <td colspan="5" class="p-0">
@@ -12,6 +16,7 @@
                             </td>
                         </tr>
                         <tr>
+                            <th></th>
                             <th>Name</th>
                             <th>Email</th>
                             <th>Date of Publication</th>
@@ -24,16 +29,19 @@
                         @foreach ($users as $user)
                             <tr>
                                 <td>
-                                    <div class="d-flex align-items-center">
-                                        <div class="">
-                                            <p class="font-weight-bold mb-0">{{ $user->name }}</p>
-                                        </div>
+                                    <div class="avatar avatar-blue mr-3">
+                                        <img src="{{ asset('storage/images/' . $user->imageURL) }}" width="40"
+                                            alt="" />
                                     </div>
                                 </td>
+                                <td>{{ $user->name }}</td>
                                 <td>{{ $user->email }}</td>
                                 <td>{{ $user->created_at->format('d/m/Y') }}</td>
                                 <td>
-                                    <div>
+                                    <div class="d-flex justify-content-center">
+                                        <a href="/admin/users/{{ $user->id }}/edit"><i
+                                                class="bx bxs-pencil mr-2"></i></a>
+
                                         <form id="delete{{ $user->id }}"
                                             action="{{ route('users.destroy', $user->id) }}" method="POST">
                                             @csrf

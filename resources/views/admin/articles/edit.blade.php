@@ -22,25 +22,27 @@
                     <div class="form-outline mb-4">
                         <h3 class="form-label">Categories</h3>
                         <div class="container">
+                            @php $count = 6; @endphp
                             @foreach ($categories as $cat)
-                                @if ($loop->iteration % 6 === 0)
-                                    </div>
-                                @endif
-                                @if ($loop->iteration % 6 === 0 || $loop->first)
+                                @if ($loop->index % $count === 0 || $loop->first)
                                     <div class="row justify-content-between">
                                 @endif
-                                <div class="col-s">
+                                <div class="col">
                                     <input name="category[]" type="checkbox" value={{ $cat->id }}
                                         {{ $article->categories->contains($cat->id) ? 'checked' : '' }} />
                                     <label class="form-label">{{ $cat->nom }}</label>
                                 </div>
+                                @if ($loop->index % $count === ($count - 1) || $loop->last)
+                                    </div>
+                                @endif
                             @endforeach
                         </div>
                     </div>
 
                     <div class="form-outline mb-4">
                         <h3 class="form-label" for="txtTitle">Title</h3>
-                        <input type="text" name="title" id="txtTitle" class="form-control" value="{{ $article->title }}" />
+                        <input type="text" name="title" id="txtTitle" class="form-control" 
+                        value="{{ $article->title }}" />
                     </div>
 
                     <div class="form-outline mb-4">
@@ -50,7 +52,7 @@
 
                     <div class="form-outline mb-4">
                         <h3 class="form-label" for="fImage">Article Image</h3><br>
-                        <img width="300" src="{{ $article->image }}" alt="">
+                        <img width="200" src="{{ asset('storage/images/' . $article->imageURL) }}" alt="">
                         <input type="file" name="image" id="fImage" class="form-control" />
                     </div>
 

@@ -6,7 +6,7 @@
             <div class="row">
                 <div class="col-sm-12">
                     <div class="text-center">
-                        <h2 class="lg-title">#{{ $tag->nom }}</h2>
+                        <h2 class="lg-title">{{ $category->nom }}</h2>
                     </div>
                 </div>
             </div>
@@ -27,7 +27,7 @@
                             </div>
 
                             <span class="cat-name text-color font-sm font-extra text-uppercase letter-spacing">
-                                #{{ $tag->nom }}
+                                {{ $category->nom }}
                             </span>
 
                             <h3 class="post-title mt-1"><a

@@ -2,16 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Tag;
+use App\Models\User;
 use App\Models\Article;
 use App\Models\Categorie;
 use App\Models\Commentaire;
-use App\Models\Tag;
-use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
-
-use function PHPUnit\Framework\isNull;
 
 class ArticleController extends Controller
 {
@@ -21,25 +18,78 @@ class ArticleController extends Controller
         return view('index', ['articles' => $articles]);
     }
 
-    public function indexAdmin()
+    public function search($request)
     {
-        $articles = Article::paginate(15);
-        if(auth()->user()->type === User::ROLE_AUTHOR){
-            $articles = Article::where('user_id', auth()->user()->id)->paginate(15);
+        $keyword = Str::lower($request->keyword);
+        $category = $request->category;
+        $author = $request->author;
+        $dateFrom = Str::lower($request->dateFrom);
+        $dateTo = Str::lower($request->dateTo);
+
+        $articles = Article::query();
+
+        if (!empty($keyword)) {
+            $articles = $articles->where('title', "like", "%" . $keyword . "%")
+                ->orWhere('contenu', "like", "%" . $keyword . "%");
         }
-        return view('admin.articles.index', ['articles' => $articles]);
+
+        if (!empty($category)) {
+            $articles->whereHas('categories', function ($query) use ($category) {
+                return $query->where('categorie_id', $category);
+            });
+        }
+
+        if (!empty($author)) {
+            $articles = $articles->where('user_id', $author);
+        }
+
+        if (!empty($dateFrom)) {
+            $articles = $articles->whereDate('created_at', '>=', $dateFrom);
+        }
+
+        if (!empty($dateTo)) {
+            $articles = $articles->whereDate('created_at', '<=', $dateTo);
+        }
+
+        return collect($articles->get());
+    }
+
+    public function indexAdmin(Request $request)
+    {
+        $articles = $this->search($request);
+        $categories = Categorie::where('active', true)->get();
+        $authors = User::whereHas('articles')->get();
+
+        $user = auth()->user();
+        if ($user->type === User::ROLE_AUTHOR) {
+            $articles = $articles->where('user_id', auth()->user()->id);
+            $categories = Categorie::whereHas('articles.user', function ($query) use ($user) {
+                return $query->where('user_id', $user->id);
+            })->where('active', true)->get();
+        }
+
+        return view('admin.articles.index', [
+            'articles' => $articles->paginate(10)->withQueryString(),
+            'categories' => $categories,
+            'authors' => $authors
+        ]);
     }
 
     public function show(Article $article)
     {
         $commentaires = $article->commentaires->where('active', 1);
         $article->commentaires = $commentaires;
-        return view("article", ['article' => $article]);
+        $userLike = false;
+        if (auth()->check()) {
+            $userLike = $article->likes()->where('user_id', auth()->user()->id)->count() > 0;
+        }
+        return view("article", ['article' => $article, 'userLike' => $userLike]);
     }
 
     public function create()
     {
-        return view("admin.create");
+        $categories = Categorie::where('active', true)->get();
+        return view("admin.articles.create", ['categories' => $categories]);
     }
 
     public function store(Request $request)
@@ -48,21 +98,39 @@ class ArticleController extends Controller
             'title' => 'required',
             'contenu' => 'required',
             'category' => 'required',
-            // 'image' => 'required|mimes:jpeg,jpg,png,gif',
+            'image' => 'required|mimes:jpeg,jpg,png,gif',
             'user' => 'required'
         ]);
 
         $article = new Article();
 
-        $path = $request->image->store('public/images');
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $request->image->store('public/images');
+            $article->imageURL = $file->hashName();
+        }
 
-        $article->image = $path;
         $article->title = $validated["title"];
         $article->contenu = $validated["contenu"];
         $article->user_id = $validated["user"];
-        $article->categories()->sync($validated["category"]);
-        $article->tags()->sync($validated["tags"]->explode(','));
+
         $article->save();
+
+        $article->categories()->attach($validated["category"]);
+
+        $tagIds = [];
+        $tags = Str::of($request["tags"])->explode(',');
+        foreach ($tags as $t) {
+            $tag = Tag::where('nom', $t)->first();
+            if (empty($tag)) {
+                $tag = new Tag();
+                $tag->nom = $t;
+                $tag->save();
+            }
+            array_push($tagIds, $tag->id);
+        }
+
+        $article->tags()->attach($tagIds);
 
         return redirect()->route("articles.index");
     }
@@ -70,7 +138,12 @@ class ArticleController extends Controller
     public function edit(Article $article)
     {
         $categories = Categorie::where('active', true)->get();
-        return view("admin.articles.edit", ['article' => $article, 'categories' => $categories]);
+        $tags = Tag::where('active', true)->get();
+        return view("admin.articles.edit", [
+            'article' => $article,
+            'categories' => $categories,
+            'tags' => $tags
+        ]);
     }
 
     public function update(Request $request, Article $article)
@@ -79,31 +152,34 @@ class ArticleController extends Controller
             'title' => 'required',
             'contenu' => 'required',
             'category' => 'required',
-            // 'image' => 'required|mimes:jpeg,jpg,png,gif',
+            'image' => 'mimes:jpeg,jpg,png,gif',
             'user' => 'required'
         ]);
 
         if ($request->hasFile('image')) {
-            $path = $request->image->store('public');
-            $article->image = $path;
+            $file = $request->file('image');
+            $request->image->store('public/images');
+            $article->imageURL = $file->hashName();
         }
 
         $article->title = $validated["title"];
         $article->contenu = $validated["contenu"];
         $article->user_id = $validated["user"];
         $article->categories()->sync($validated["category"]);
+
+        //$article->tags()->sync($request->tags);
+
         $tagIds = [];
         $tags = Str::of($request["tags"])->explode(',');
         foreach ($tags as $t) {
             $tag = Tag::where('nom', $t)->first();
-            if(isNull($tag)){
+            if (empty($tag)) {
                 $tag = new Tag();
                 $tag->nom = $t;
                 $tag->save();
             }
             array_push($tagIds, $tag->id);
         }
-
         $article->tags()->sync($tagIds);
 
         $article->update();
@@ -139,7 +215,10 @@ class ArticleController extends Controller
         $articles = Article::paginate(5);
 
         if (!empty($keyword)) {
-            $articles = Article::where('title', "like", "%" . $keyword . "%")->orWhere('content', "like", "%" . $keyword . "%")->paginate(5)->withQueryString();
+            $articles = Article::where('title', "like", "%" . $keyword . "%")
+                ->orWhere('contenu', "like", "%" . $keyword . "%")
+                ->paginate(5)
+                ->withQueryString();
         }
 
         return view("search", ['articles' => $articles]);

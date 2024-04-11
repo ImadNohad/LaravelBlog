@@ -17,21 +17,44 @@
 
                 <form action="/admin/articles" method="POST" enctype="multipart/form-data">
                     @csrf
-                    
+
+                    <div class="form-outline mb-4">
+                        <h3 class="form-label">Categories</h3>
+                        <div class="container">
+                            @php $count = 6; @endphp
+                            @foreach ($categories as $cat)
+                                @if ($loop->index % $count === 0 || $loop->first)
+                                    <div class="row justify-content-between">
+                                @endif
+                                <div class="col">
+                                    <input name="category[]" type="checkbox" value={{ $cat->id }} />
+                                    <label class="form-label">{{ $cat->nom }}</label>
+                                </div>
+                                @if ($loop->index % $count === $count - 1 || $loop->last)
+                                    </div>
+                                @endif
+                            @endforeach
+                        </div>
+                    </div>
+
                     <div class="form-outline mb-4">
                         <label class="form-label" for="txtTitle">Title</label>
-                        <input type="text" name="title" id="txtTitle" class="form-control"
-                            value="{{ old("title") }}" />
+                        <input type="text" name="title" class="form-control" value="{{ old('title') }}" />
                     </div>
 
                     <div class="form-outline mb-4">
                         <label class="form-label" for="txtContent">Article Body</label>
-                        <textarea class="form-control" name="content" id="txtcontent" rows="20">{{ old("title") }}</textarea>
+                        <textarea class="form-control" name="contenu" rows="20">{{ old('contenu') }}</textarea>
                     </div>
 
                     <div class="form-outline mb-4">
                         <label class="form-label" for="fImage">Article Image</label><br>
-                        <input type="file" name="image" id="fImage" class="form-control" />
+                        <input type="file" name="image" class="form-control" />
+                    </div>
+
+                    <div class="form-outline mb-4">
+                        <h3 class="form-label" for="txtTags">Tags</h3>
+                        <input type="text" name="tags" class="form-control" value="{{ old('tags') }}" />
                     </div>
 
                     <input type="hidden" name="user" value="{{ auth()->user()->id }}">
