@@ -55,7 +55,11 @@ class UserController extends Controller
 
         $user->save();
 
-        return redirect()->route("users.index");
+        return redirect()->route("users.index")->with([
+            'message' => 'User added successfully.',
+            'icon' => 'bx bx-check-circle',
+            'type' => 'success'
+        ]);;
     }
 
     /**
@@ -104,14 +108,23 @@ class UserController extends Controller
 
         $user->update();
 
-        return redirect()->route("users.index");
+        return redirect()->route("users.index")->with([
+            'message' => 'User updated successfully.',
+            'icon' => 'bx bx-check-circle',
+            'type' => 'success'
+        ]);;
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(User $user)
     {
-        //
+        $user->delete();
+        return redirect()->back()->with([
+            'message' => 'User deleted successfully.',
+            'icon' => 'bx bx-check-circle',
+            'type' => 'success'
+        ]);
     }
 }

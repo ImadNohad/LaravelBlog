@@ -21,6 +21,6 @@ class AdminAccess
             return $next($request);
         }
 
-        return redirect('/')->with('message', 'Unauthorized Access');
+        return redirect('/')->with(['message' => 'Unauthorized Access', 'icon' => 'ti-lock', 'type' => 'warning']);
     }
 }

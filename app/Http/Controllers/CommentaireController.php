@@ -85,7 +85,11 @@ class CommentaireController extends Controller
     {
         $comment->active = !$comment->active;
         $comment->update();
-        return redirect()->back();
+        return redirect()->back()->with([
+            'message' => $comment->active ? 'Comment Approved.' : 'Comment Disapproved.',
+            'icon' => 'bx bx-check-circle',
+            'type' => 'success'
+        ]);
     }
 
     /**
@@ -108,6 +112,10 @@ class CommentaireController extends Controller
     {
         $comment->delete();
 
-        return redirect()->back();
+        return redirect()->back()->with([
+            'message' => 'Comment deleted successfully',
+            'icon' => 'bx bx-check-circle',
+            'type' => 'success'
+        ]);
     }
 }

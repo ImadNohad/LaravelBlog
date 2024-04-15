@@ -108,7 +108,7 @@
                         @foreach ($article->commentaires as $comment)
                             <div class="comment-area-box d-flex {{ $loop->first ? 'mt-5' : '' }}">
                                 <img height="100" width="100" alt=""
-                                    src="{{ asset($comment->user->imageURL) }}" class="mt-2 flex-shrink-0 me-3">
+                                    src="{{ asset('storage/images/' . $comment->user->imageURL) }}" class="mt-2 flex-shrink-0 me-3">
 
                                 <div class="flex-grow-1 ms-4">
                                     <h4 class="mb-0">{{ $comment->user->name }}</h4>

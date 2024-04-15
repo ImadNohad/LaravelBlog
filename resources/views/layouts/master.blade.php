@@ -39,7 +39,7 @@
 
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapse"
                     aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="ti-menu  text-white"></span>
+                    <span class="ti-menu text-white"></span>
                 </button>
 
                 <div class="collapse navbar-collapse" id="navbar-collapse">
@@ -75,7 +75,7 @@
                         </div>
                         <div class="col-md-2 col-3 text-right">
                             <div class="search_toggle toggle-wrap d-inline-block">
-                                <i class="ti-close"></i>
+                                <i class='bx bx-x bx-lg'></i>
                             </div>
                         </div>
                     </div>
@@ -86,8 +86,8 @@
     <!--search overlay end-->
 
     @if (session('message'))
-        <div class="alert alert-warning">
-            <i class="ti-lock"></i>
+        <div class="alert alert-{{ session('type') }}">
+            <i class={{ session('icon') }}></i>
             {{ session('message') }}
         </div>
     @endif

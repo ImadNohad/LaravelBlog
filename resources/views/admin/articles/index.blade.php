@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 @section('content')
     <div class="container">
-        <div class="row py-5">
+        <div class="row">
             <div class="col-12">
                 <h1>Articles List</h1>
 
@@ -121,7 +121,7 @@
                                     </td>
                                     <td>
                                         <div class="d-flex">
-                                            <a href="/admin/articles/{{ $item->id }}/edit"><i
+                                            <a href="/admin/articles/{{ $item->id }}/edit{{$queryString}}"><i
                                                     class="bx bxs-pencil mr-2"></i></a>
 
                                             <form id="delete{{ $item->id }}"

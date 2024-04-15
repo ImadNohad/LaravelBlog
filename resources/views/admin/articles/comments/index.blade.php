@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 @section('content')
     <div class="container">
-        <div class="row py-5">
+        <div class="row">
             <div class="col-12">
                 @isset($article)
                     <h1>{{ $article->title }}'s Comments</h1>

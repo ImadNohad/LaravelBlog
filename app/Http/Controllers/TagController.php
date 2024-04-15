@@ -72,7 +72,11 @@ class TagController extends Controller
         $tag->active = $request->boolean('active');
         $tag->save();
 
-        return redirect()->route("tags.index");
+        return redirect()->route("tags.index")->with([
+            'message' => 'Tag added successfully.',
+            'icon' => 'bx bx-check-circle',
+            'type' => 'success'
+        ]);;
     }
 
     /**
@@ -104,7 +108,11 @@ class TagController extends Controller
         $tag->active = $request->boolean('active');
         $tag->update();
 
-        return redirect()->route("tags.index");
+        return redirect()->route("tags.index")->with([
+            'message' => 'Tag updated successfully.',
+            'icon' => 'bx bx-check-circle',
+            'type' => 'success'
+        ]);;
     }
 
     /**
@@ -114,6 +122,10 @@ class TagController extends Controller
     {
         $tag->delete();
 
-        return redirect()->back();
+        return redirect()->back()->with([
+            'message' => 'Tag deleted successfully.',
+            'icon' => 'bx bx-check-circle',
+            'type' => 'success'
+        ]);;
     }
 }

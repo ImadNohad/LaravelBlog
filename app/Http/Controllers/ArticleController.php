@@ -68,10 +68,12 @@ class ArticleController extends Controller
             })->where('active', true)->get();
         }
 
+        $queryString = Str::remove($request->url(), $request->fullUrl());
         return view('admin.articles.index', [
             'articles' => $articles->paginate(10)->withQueryString(),
             'categories' => $categories,
-            'authors' => $authors
+            'authors' => $authors,
+            'queryString' => $queryString
         ]);
     }
 
@@ -132,10 +134,14 @@ class ArticleController extends Controller
 
         $article->tags()->attach($tagIds);
 
-        return redirect()->route("articles.index");
+        return redirect()->route("articles.index")->with([
+            'message' => 'Article added successfully',
+            'icon' => 'bx bx-check-circle',
+            'type' => 'success'
+        ]);
     }
 
-    public function edit(Article $article)
+    public function edit(Request $request, Article $article)
     {
         $categories = Categorie::where('active', true)->get();
         $tags = Tag::where('active', true)->get();
@@ -184,13 +190,21 @@ class ArticleController extends Controller
 
         $article->update();
 
-        return redirect()->route("articles.index");
+        return redirect()->route("articles.index")->with([
+            'message' => 'Article updated successfully',
+            'icon' => 'bx bx-check-circle',
+            'type' => 'success'
+        ]);
     }
 
     public function destroy(Article $article)
     {
         $article->delete();
-        return redirect()->route("articles.index");
+        return redirect()->route("articles.index")->with([
+            'message' => 'Article deleted successfully',
+            'icon' => 'bx bx-check-circle',
+            'type' => 'success'
+        ]);
     }
 
     public function storeComment(Request $request, Article $article)
@@ -206,7 +220,13 @@ class ArticleController extends Controller
 
         $article->commentaires()->save($newComment);
 
-        return view("article", ['article' => $article]);
+        return redirect()->route("article.show", ['article' => $article])->with(
+            [
+                'message' => 'Comment added successfully.',
+                'icon' => 'bx bx-check-circle',
+                'type' => 'success'
+            ]
+        );
     }
 
     public function searchArticles()

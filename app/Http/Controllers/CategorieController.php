@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 class CategorieController extends Controller
 {
-        /**
+    /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
@@ -17,7 +17,8 @@ class CategorieController extends Controller
         return view('admin.categories.index', ['categories' => $categories]);
     }
 
-    public function categoryArticles(Categorie $category) {
+    public function categoryArticles(Categorie $category)
+    {
         $articles = $category->articles->paginate(6);
         return view('category', ['category' => $category, 'articles' => $articles]);
     }
@@ -72,7 +73,11 @@ class CategorieController extends Controller
         $categorie->active = $request->boolean('active');
         $categorie->save();
 
-        return redirect()->route("categories.index");
+        return redirect()->route("categories.index")->with([
+            'message' => 'Category added successfully',
+            'icon' => 'bx bx-check-circle',
+            'type' => 'success'
+        ]);
     }
 
     /**
@@ -104,7 +109,11 @@ class CategorieController extends Controller
         $category->active = $request->boolean('active');
         $category->update();
 
-        return redirect()->route("categories.index");
+        return redirect()->route("categories.index")->with([
+            'message' => 'Category updated successfully',
+            'icon' => 'bx bx-check-circle',
+            'type' => 'success'
+        ]);
     }
 
     /**
@@ -114,6 +123,10 @@ class CategorieController extends Controller
     {
         $category->delete();
 
-        return redirect()->back();
+        return redirect()->back()->with([
+            'message' => 'Category deleted successfully',
+            'icon' => 'bx bx-check-circle',
+            'type' => 'success'
+        ]);
     }
 }

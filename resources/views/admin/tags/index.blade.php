@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 @section('content')
     <div class="container">
-        <div class="row py-5">
+        <div class="row">
             <div class="col-12">
                 <h1>Tags List</h1>
                 <div class="mt-4">
@@ -86,7 +86,7 @@
                                                 @method('DELETE')
 
                                                 <button class="text-danger border-0 bg-transparent" type="button"
-                                                    data-toggle="modal" data-target="#exampleModalCenter"
+                                                data-bs-toggle="modal" data-bs-target="#exampleModalCenter"
                                                     data-bs-id="{{ $item->id }}">
                                                     <i class="bx bxs-trash mr-2"></i>
                                                 </button>
@@ -117,15 +117,15 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLongTitle">Confirmation</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true"></span>
                         </button>
                     </div>
                     <div class="modal-body">
                         Do you really want to delete this tag ?
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                         <button id="show-confirm" type="button" class="btn btn-primary">Save changes</button>
                     </div>
                 </div>

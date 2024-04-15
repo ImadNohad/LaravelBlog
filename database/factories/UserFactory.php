@@ -27,7 +27,7 @@ class UserFactory extends Factory
             'name' => fake()->name(),
             'type' => fake()->randomElement(['admin', 'auteur', 'visiteur']),
             'email' => fake()->unique()->safeEmail(),
-            'imageURL' => fake()->imageUrl(),
+            'imageURL' => 'KB6Vf7v3jOs955hZdJDfPgazgtSJ6r0yjGri6hix.jpg',
             'bio' => fake()->paragraph(4, false),
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
